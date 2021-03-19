@@ -3,11 +3,8 @@ server:
 
 eureka:
   client:
-    enabled: true
-    register-with-eureka: true
-    fetch-registry: true
     service-url:
-      default-zone: http://localhost:8040/eureka
+      defaultZone: http://localhost:8040/eureka
 
 spring:
   application:
