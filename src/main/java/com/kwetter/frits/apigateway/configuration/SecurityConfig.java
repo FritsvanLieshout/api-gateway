@@ -1,10 +1,14 @@
 package com.kwetter.frits.apigateway.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
@@ -13,8 +17,13 @@ import org.springframework.http.HttpMethod;
 
 import java.util.Arrays;
 
+@Configuration
 @EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
 public class SecurityConfig {
+
+    @Autowired
+    AuthenticationFilter filter;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
@@ -23,13 +32,16 @@ public class SecurityConfig {
                 .cors().configurationSource(configCors())
                 .and()
                 .authorizeExchange()
-                    .pathMatchers(HttpMethod.GET, "/api/timeline/**").hasAuthority("timeline:read")
+                    .pathMatchers(HttpMethod.GET, "/api/timeline/**").permitAll()
                     .pathMatchers(HttpMethod.GET, "/api/tweets/**").permitAll()
                     .pathMatchers(HttpMethod.POST, "/api/tweets/**").permitAll()
                     .pathMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                     .pathMatchers(HttpMethod.POST, "/api/user/register").permitAll()
+                    .pathMatchers("/actuator/**").permitAll()
+                    .pathMatchers("/api/user/status").permitAll()
                 .anyExchange().authenticated()
-                .and().build();
+                .and()
+                .build();
     }
 
     @Bean
@@ -40,7 +52,6 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:3000"); //https://kwetterplatform.azurewebsites.net/
         configuration.setMaxAge(3600L);
         configuration.addAllowedHeader("*");
-        configuration.addExposedHeader("*");
         configuration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
