@@ -32,13 +32,8 @@ public class SecurityConfig {
                 .cors().configurationSource(configCors())
                 .and()
                 .authorizeExchange()
-                    .pathMatchers(HttpMethod.GET, "/api/timeline/**").permitAll()
-                    .pathMatchers(HttpMethod.GET, "/api/tweets/**").permitAll()
-                    .pathMatchers(HttpMethod.POST, "/api/tweets/**").permitAll()
-                    .pathMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                    .pathMatchers(HttpMethod.POST, "/api/user/register").permitAll()
-                    .pathMatchers("/actuator/**").permitAll()
-                    .pathMatchers("/api/user/status").permitAll()
+                    .pathMatchers("/api/**").permitAll()
+                    .pathMatchers("/actuator/**").permitAll() //Need to be Admin rights
                 .anyExchange().authenticated()
                 .and()
                 .build();

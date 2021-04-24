@@ -35,6 +35,9 @@ public class AuthenticationFilter implements GatewayFilter {
     private RouterValidator routerValidator;
 
     @Autowired
+    private AuthorizationValidator authorizationValidator;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Override
@@ -47,42 +50,50 @@ public class AuthenticationFilter implements GatewayFilter {
             if (cookies != null && cookies.size() > 0) {
                 List<HttpCookie> cookieList = cookies.get(jwtUtil.getHeader());
 
-                for (HttpCookie cookie : cookieList) {
-                    if (Strings.isNullOrEmpty(cookie.getValue()) && !cookie.getName().equals(jwtUtil.getHeader())) {
-                        return chain.filter(exchange);
-                    } else {
-                        token = cookie.getValue();
+                if (!cookieList.isEmpty()) {
+                    for (HttpCookie cookie : cookieList) {
+                        if (Strings.isNullOrEmpty(cookie.getValue()) && !cookie.getName().equals(jwtUtil.getHeader())) {
+                            return chain.filter(exchange);
+                        } else {
+                            token = cookie.getValue();
+                        }
                     }
+
+                    //Make a private method for this
+                    try {
+                        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+                        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtUtil.getSecret());
+                        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+
+                        Jws<Claims> claimsJws = Jwts.parser()
+                                .setSigningKey(signingKey)
+                                .parseClaimsJws(token);
+
+                        Claims body = claimsJws.getBody();
+                        String username = body.getSubject();
+                        var authorities = (List<Map<String, String>>) body.get("authorities");
+                        Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
+                                .map(m -> new SimpleGrantedAuthority(m.get("authority")))
+                                .collect(Collectors.toSet());
+
+                        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                                username,
+                                null,
+                                simpleGrantedAuthorities
+                        );
+
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                        if (!authorizationValidator.checkAuthority(request.getURI().getPath(), simpleGrantedAuthorities)) {
+                            return onError(exchange, "Forbidden", HttpStatus.FORBIDDEN);
+                        }
+
+                    } catch (JwtException e) {
+                        return onError(exchange, String.format("Token %s cannot be trusted / is expired", token), HttpStatus.UNAUTHORIZED);
+                    }
+                    return chain.filter(exchange);
                 }
-
-                try {
-                    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-                    byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtUtil.getSecret());
-                    Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-                    Jws<Claims> claimsJws = Jwts.parser()
-                            .setSigningKey(signingKey)
-                            .parseClaimsJws(token);
-
-                    Claims body = claimsJws.getBody();
-                    String username = body.getSubject();
-                    var authorities = (List<Map<String, String>>) body.get("authorities");
-                    Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
-                            .map(m -> new SimpleGrantedAuthority(m.get("authority")))
-                            .collect(Collectors.toSet());
-
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            simpleGrantedAuthorities
-                    );
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                } catch (JwtException e) {
-                     return onError(exchange, String.format("Token %s cannot be trusted / is expired", token), HttpStatus.UNAUTHORIZED);
-                }
-                return chain.filter(exchange);
+                return onError(exchange, "Cookie is missing", HttpStatus.UNAUTHORIZED);
             }
             return onError(exchange, "Cookie is missing", HttpStatus.UNAUTHORIZED);
         }

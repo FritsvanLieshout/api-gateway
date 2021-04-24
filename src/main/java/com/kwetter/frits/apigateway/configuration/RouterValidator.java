@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 @Component
 public class RouterValidator {
 
+    //Those endpoints are public, so everyone can sign in or sign up
     public static final List<String> endpoints = List.of(
             "/api/user/register",
             "/api/auth/login"
