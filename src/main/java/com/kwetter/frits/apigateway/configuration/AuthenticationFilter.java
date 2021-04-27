@@ -61,7 +61,7 @@ public class AuthenticationFilter implements GatewayFilter {
 
                     //Make a private method for this
                     try {
-                        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+                        var signatureAlgorithm = SignatureAlgorithm.HS256;
                         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtUtil.getSecret());
                         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
@@ -69,7 +69,7 @@ public class AuthenticationFilter implements GatewayFilter {
                                 .setSigningKey(signingKey)
                                 .parseClaimsJws(token);
 
-                        Claims body = claimsJws.getBody();
+                        var body = claimsJws.getBody();
                         String username = body.getSubject();
                         var authorities = (List<Map<String, String>>) body.get("authorities");
                         Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()

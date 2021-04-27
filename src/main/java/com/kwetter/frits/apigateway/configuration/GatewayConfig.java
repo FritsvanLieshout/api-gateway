@@ -18,6 +18,9 @@ public class GatewayConfig {
     public RouteLocator routes(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder
                 .routes()
+                    .route("tweet-service", r -> r.path("/api/tweets/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                            .uri("http://localhost:8070"))
                     .route("user-service", r -> r.path("/api/user/**")
                         .filters(f -> f.filter(authenticationFilter))
                             .uri("http://localhost:8069"))
