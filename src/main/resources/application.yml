@@ -36,8 +36,12 @@ spring:
           uri: http://localhost:8067
           predicates:
             - Path=/api/auth/{segment}
+        - id: follow-service
+          uri: http://localhost:8066
+          predicates:
+            - Path=/api/follow/{segment}
 management:
   endpoints:
     web:
       exposure:
-        include: healt,gateway
+        include: health,gateway

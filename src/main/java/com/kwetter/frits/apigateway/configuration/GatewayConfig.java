@@ -26,10 +26,13 @@ public class GatewayConfig {
                             .uri("http://localhost:8069"))
                     .route("timeline-service", r -> r.path("/api/timeline/**")
                         .filters(f -> f.filter(authenticationFilter))
-                        .uri("http://localhost:8068"))
+                            .uri("http://localhost:8068"))
                     .route("auth-service", r -> r.path("/api/auth/**")
                         .filters(f -> f.filter(authenticationFilter))
                             .uri("http://localhost:8067"))
+                    .route("follow-service", r -> r.path("/api/follow/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                            .uri("http://localhost:8066"))
                 .build();
     }
 }
