@@ -13,6 +13,8 @@ public class AuthorizationValidator {
     public static final List<EndpointAuthority> endpointAuthorities = List.of(
             new EndpointAuthority("/api/user/status", "user:read"),
             new EndpointAuthority("/api/user/me", "user:read"),
+            new EndpointAuthority("/api/user/edit", "user:update"),
+            new EndpointAuthority("/api/user/permanent/remove", "user:delete"),
             new EndpointAuthority("/api/timeline/all", "timeline:read"),
             new EndpointAuthority("/api/timeline/unique", "timeline:read"),
             new EndpointAuthority("/api/timeline/own/tweets", "timeline:read"),
