@@ -18,12 +18,19 @@ public class AuthorizationValidator {
             new EndpointAuthority("/api/timeline/all", "timeline:read"),
             new EndpointAuthority("/api/timeline/unique", "timeline:read"),
             new EndpointAuthority("/api/timeline/own/tweets", "timeline:read"),
-            new EndpointAuthority("/api/tweets/tweet", "ROLE_KWETTER_USER"),
+            new EndpointAuthority("/api/tweets/tweet", "tweet:write"),
+            new EndpointAuthority("/api/tweets/mentions", "tweet:read"),
             new EndpointAuthority("/api/follow/user/follow", "ROLE_KWETTER_USER"),
             new EndpointAuthority("/api/follow/user/unfollow", "ROLE_KWETTER_USER"),
             new EndpointAuthority("/api/follow/following", "ROLE_KWETTER_USER"),
             new EndpointAuthority("/api/follow/followers", "ROLE_KWETTER_USER"),
-            new EndpointAuthority("/api/auth/logout", "user:logout")
+            new EndpointAuthority("/api/auth/logout", "user:logout"),
+            new EndpointAuthority("/api/trending/items", "user:read"),
+            new EndpointAuthority("/api/like/add", "ROLE_KWETTER_USER"),
+            new EndpointAuthority("/api/like/remove", "ROLE_KWETTER_USER"),
+            new EndpointAuthority("/api/like/tweet", "ROLE_KWETTER_USER"),
+            new EndpointAuthority("/api/like/user", "ROLE_KWETTER_USER"),
+            new EndpointAuthority("/api/like/user/likes", "ROLE_KWETTER_USER")
     );
 
     public Boolean checkAuthority(String endpoint, Set<SimpleGrantedAuthority> authorities) {

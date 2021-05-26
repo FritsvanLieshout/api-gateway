@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource configCors() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "UPDATE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.addAllowedOrigin("http://localhost:3000"); //https://kwetterplatform.azurewebsites.net/
         configuration.setMaxAge(3600L);

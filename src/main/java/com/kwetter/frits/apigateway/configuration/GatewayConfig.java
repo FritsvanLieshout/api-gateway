@@ -33,6 +33,12 @@ public class GatewayConfig {
                     .route("follow-service", r -> r.path("/api/follow/**")
                         .filters(f -> f.filter(authenticationFilter))
                             .uri("http://localhost:8066"))
+                    .route("trending-service", r -> r.path("/api/trending/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                            .uri("http://localhost:8065"))
+                    .route("like-service", r -> r.path("/api/like/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                            .uri("http://localhost:8064"))
                 .build();
     }
 }

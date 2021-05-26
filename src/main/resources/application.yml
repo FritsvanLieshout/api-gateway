@@ -36,10 +36,19 @@ spring:
           uri: http://localhost:8067
           predicates:
             - Path=/api/auth/{segment}
+            - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: follow-service
           uri: http://localhost:8066
           predicates:
             - Path=/api/follow/{segment}
+        - id: trending-service
+          uri: http://localhost:8065
+          predicates:
+            - Path=/api/trending/{segment}
+        - id: like-service
+          uri: http://localhost:8064
+          predicates:
+            - Path=/api/like/{segment}
 management:
   endpoints:
     web:
