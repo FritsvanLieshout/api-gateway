@@ -19,34 +19,34 @@ spring:
           enabled: true
       routes:
         - id: tweet-service
-          uri: http://tweet-service:8070
+          uri: lb://tweet-service
           predicates:
             - Path=/api/tweets/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: user-service
-          uri: http://user-service:8069
+          uri: lb://user-service
           predicates:
             - Path=/api/user/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: timeline-service
-          uri: http://timeline-service:8068
+          uri: lb://timeline-service:8068
           predicates:
             - Path=/api/timeline/{segment}
         - id: auth-service
-          uri: http://auth-service:8067
+          uri: lb://auth-service
           predicates:
             - Path=/api/auth/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: follow-service
-          uri: http://follow-service:8066
+          uri: lb://follow-service:8066
           predicates:
             - Path=/api/follow/{segment}
         - id: trending-service
-          uri: http://trending-service:8065
+          uri: lb://trending-service
           predicates:
             - Path=/api/trending/{segment}
         - id: like-service
-          uri: http://like-service:8064
+          uri: lb://like-service
           predicates:
             - Path=/api/like/{segment}
 management:
