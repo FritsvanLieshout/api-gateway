@@ -8,6 +8,7 @@ eureka:
     fetch-registry: true
     serviceUrl:
       defaultZone: http://eureka-discovery-service:8761/eureka
+    proxy-host:
 
 spring:
   application:
@@ -19,34 +20,34 @@ spring:
           enabled: true
       routes:
         - id: tweet-service
-          uri: lb://tweet-service
+          uri: http://tweet-service:80
           predicates:
             - Path=/api/tweets/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: user-service
-          uri: lb://user-service
+          uri: http://user-service:80
           predicates:
             - Path=/api/user/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: timeline-service
-          uri: lb://timeline-service
+          uri: http://timeline-service:80
           predicates:
             - Path=/api/timeline/{segment}
         - id: auth-service
-          uri: lb://auth-service
+          uri: http://auth-service:80
           predicates:
             - Path=/api/auth/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: follow-service
-          uri: lb://follow-service
+          uri: http://follow-service:80
           predicates:
             - Path=/api/follow/{segment}
         - id: trending-service
-          uri: lb://trending-service
+          uri: http://trending-service:80
           predicates:
             - Path=/api/trending/{segment}
         - id: like-service
-          uri: lb://like-service
+          uri: http://like-service:80
           predicates:
             - Path=/api/like/{segment}
 management:
