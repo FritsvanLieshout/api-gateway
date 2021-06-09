@@ -7,7 +7,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: http://eureka-discovery-service:8761/eureka
+      defaultZone: http://eureka-discovery-service-service:8761/eureka
 
 spring:
   application:
@@ -18,35 +18,35 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: tweet-service
-          uri: lb://tweet-service
+        - id: tweet-service-service
+          uri: lb://tweet-service-service
           predicates:
             - Path=/api/tweets/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
-        - id: user-service
-          uri: lb://user-service
+        - id: user-service-service
+          uri: lb://user-service-service
           predicates:
             - Path=/api/user/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
-        - id: timeline-service
-          uri: lb://timeline-service:8068
+        - id: timeline-service-service
+          uri: lb://timeline-service-service
           predicates:
             - Path=/api/timeline/{segment}
-        - id: auth-service
-          uri: lb://auth-service
+        - id: auth-service-service
+          uri: lb://auth-service-service
           predicates:
             - Path=/api/auth/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
-        - id: follow-service
-          uri: lb://follow-service:8066
+        - id: follow-service-service
+          uri: lb://follow-service-service
           predicates:
             - Path=/api/follow/{segment}
-        - id: trending-service
-          uri: lb://trending-service
+        - id: trending-service-service
+          uri: lb://trending-service-service
           predicates:
             - Path=/api/trending/{segment}
-        - id: like-service
-          uri: lb://like-service
+        - id: like-service-service
+          uri: lb://like-service-service
           predicates:
             - Path=/api/like/{segment}
 management:
