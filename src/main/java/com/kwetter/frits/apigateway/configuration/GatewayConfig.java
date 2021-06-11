@@ -23,7 +23,7 @@ public class GatewayConfig {
                             .uri("lb://tweet-service"))
                     .route("user-service", r -> r.path("/api/user/**")
                         .filters(f -> f.filter(authenticationFilter).stripPrefix(1))
-                            .uri("http://user-service:8069"))
+                            .uri("lb://user-service"))
                     .route("timeline-service", r -> r.path("/api/timeline/**")
                         .filters(f -> f.filter(authenticationFilter))
                             .uri("lb://timeline-service"))
