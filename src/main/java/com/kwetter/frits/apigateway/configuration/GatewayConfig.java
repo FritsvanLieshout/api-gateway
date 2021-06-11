@@ -28,7 +28,7 @@ public class GatewayConfig {
                         .filters(f -> f.filter(authenticationFilter))
                             .uri("lb://timeline-service"))
                     .route("auth-service", r -> r.path("/api/auth/**")
-                        .filters(f -> f.filter(authenticationFilter).stripPrefix(1))
+                        .filters(f -> f.filter(authenticationFilter))
                             .uri("lb://auth-service"))
                     .route("follow-service", r -> r.path("/api/follow/**")
                         .filters(f -> f.filter(authenticationFilter))
