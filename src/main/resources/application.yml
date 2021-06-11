@@ -7,7 +7,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
-      defaultZone: http://eureka-discovery-service/eureka
+      defaultZone: http://eureka-discovery-service:8761/eureka
       #defaultZone: http://localhost:8761/eureka
 
 spring:
@@ -23,6 +23,38 @@ spring:
         locator:
           lowerCaseServiceId: true
           enabled: true
+      routes:
+        - id: tweet-service
+          uri: lb://tweet-service
+          predicates:
+            - Path=/api/tweets/{segment}
+            - Method=GET, POST, DELETE, PUT, OPTIONS
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/{segment}
+            - Method=GET, POST, DELETE, PUT, OPTIONS
+        - id: timeline-service
+          uri: lb://timeline-service
+          predicates:
+            - Path=/api/timeline/{segment}
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/{segment}
+            - Method=GET, POST, DELETE, PUT, OPTIONS
+        - id: follow-service
+          uri: lb://follow-service
+          predicates:
+            - Path=/api/follow/{segment}
+        - id: trending-service
+          uri: lb://trending-service
+          predicates:
+            - Path=/api/trending/{segment}
+        - id: like-service
+          uri: lb://like-service
+          predicates:
+            - Path=/api/like/{segment}
 management:
   endpoints:
     web:
