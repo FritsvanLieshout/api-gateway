@@ -30,7 +30,7 @@ spring:
             - Path=/api/tweets/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
         - id: user-service
-          uri: lb://user-service
+          uri: http://user-service:8069
           predicates:
             - Path=/api/user/{segment}
             - Method=GET, POST, DELETE, PUT, OPTIONS
