@@ -14,42 +14,15 @@ spring:
   application:
     name: api-gateway
   cloud:
+    kubernetes:
+      enabled: true
+      reload:
+        enabled: true
     gateway:
       discovery:
         locator:
+          lowerCaseServiceId: true
           enabled: true
-      routes:
-        - id: tweet-service
-          uri: http://tweet-service:80
-          predicates:
-            - Path=/api/tweets/{segment}
-            - Method=GET, POST, DELETE, PUT, OPTIONS
-        - id: user-service
-          uri: http://user-service:80
-          predicates:
-            - Path=/api/user/{segment}
-            - Method=GET, POST, DELETE, PUT, OPTIONS
-        - id: timeline-service
-          uri: http://timeline-service:80
-          predicates:
-            - Path=/api/timeline/{segment}
-        - id: auth-service
-          uri: http://auth-service:80
-          predicates:
-            - Path=/api/auth/{segment}
-            - Method=GET, POST, DELETE, PUT, OPTIONS
-        - id: follow-service
-          uri: http://follow-service:80
-          predicates:
-            - Path=/api/follow/{segment}
-        - id: trending-service
-          uri: http://trending-service:80
-          predicates:
-            - Path=/api/trending/{segment}
-        - id: like-service
-          uri: http://like-service:80
-          predicates:
-            - Path=/api/like/{segment}
 management:
   endpoints:
     web:

@@ -25,7 +25,7 @@ public class GatewayConfig {
                         .filters(f -> f.filter(authenticationFilter))
                             .uri("lb://user-service"))
                     .route("timeline-service", r -> r.path("/api/timeline/**")
-                        .filters(f -> f.filter(authenticationFilter))
+                        .filters(f -> f.filter(authenticationFilter).circuitBreaker(c -> c.setName("myCircuitBreaker").setFallbackUri("forward:/api/fallback?endpoint=timeline")))
                             .uri("lb://timeline-service"))
                     .route("auth-service", r -> r.path("/api/auth/**")
                         .filters(f -> f.filter(authenticationFilter))
