@@ -39,6 +39,9 @@ public class GatewayConfig {
                     .route("like-service", r -> r.path("/api/like/**")
                         .filters(f -> f.filter(authenticationFilter))
                             .uri("lb://like-service"))
+                    .route("moderation-service", r -> r.path("/api/moderation/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                            .uri("lb://moderation-service"))
                 .build();
     }
 }
