@@ -44,7 +44,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT", "OPTIONS"));
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("http://localhost:3000"); //https://kwetterplatform.azurewebsites.net/
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://20.86.242.101", "https://kwetterplatform.azurewebsites.net"));
         configuration.setMaxAge(3600L);
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");
